@@ -2,7 +2,7 @@ package com.jayr.todo.di
 
 import android.app.Application
 import androidx.room.Room
-import com.jayr.todo.data.TodoDatabse
+import com.jayr.todo.data.TodoDatabase
 import com.jayr.todo.data.TodoRepository
 import com.jayr.todo.data.TodoRepositoryImpl
 import dagger.Module
@@ -16,20 +16,22 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-//    How daagger can create our room interface
-    @Provides
-    @Singleton
-    fun provideTodoDatabase (app: Application):TodoDatabse{
+//    Repository instance
+//    How dagger can create our room interface
+    @Provides //provides a dependency
+    @Singleton // single instance that will exist of it
+    fun provideTodoDatabase (app: Application):TodoDatabase{// context -->  app
         return Room.databaseBuilder(
             app,
-            TodoDatabse::class.java,
-            "todo_db"
+            TodoDatabase::class.java,
+            "todo_db" //name of todoDB
         ).build()
     }
 
+//Database Instance
     @Provides
     @Singleton
-    fun provideTodoRepository(db:TodoDatabse):TodoRepository{
+    fun provideTodoRepository(db:TodoDatabase):TodoRepository{
         return TodoRepositoryImpl(db.dao)
     }
 }
